@@ -10,30 +10,29 @@ include(${SlicerExecutionModel_USE_FILE})
 
 # Find ITK
 set(ITK_IO_MODULES_USED
-ITKIOImageBase
-ITKIONRRD
-ITKIOCSV
-ITKIOGIPL
-ITKIOHDF5
-ITKIOIPL
-ITKIOImageBase
-ITKIOLSM
-ITKIOMRC
-ITKIOMesh
-ITKIOMeta
-ITKIONIFTI
-ITKIONRRD
-ITKIORAW
-ITKIOVTK
-)
-#Find ITK
+  ITKIOImageBase
+  ITKIONRRD
+  ITKIOCSV
+  ITKIOGIPL
+  ITKIOHDF5
+  ITKIOIPL
+  ITKIOImageBase
+  ITKIOLSM
+  ITKIOMRC
+  ITKIOMesh
+  ITKIOMeta
+  ITKIONIFTI
+  ITKIONRRD
+  ITKIORAW
+  ITKIOVTK
+  )
 find_package(ITK 4.7 REQUIRED COMPONENTS
   ITKCommon
   ITKIOImageBase
   ITKImageFunction
   ITKVTK
   ${ITK_IO_MODULES_USED}
-)
+  )
 include(${ITK_USE_FILE})
 
 # Find VTK
@@ -53,7 +52,7 @@ include(ExternalData)
 
 option(BUILD_TESTING "Build the testing tree" ON)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   include(CTest)
-  ADD_SUBDIRECTORY(Testing)
-ENDIF(BUILD_TESTING)
+  add_subdirectory(Testing)
+endif()
