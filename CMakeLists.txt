@@ -36,7 +36,19 @@ find_package(ITK 4.7 REQUIRED COMPONENTS
 include(${ITK_USE_FILE})
 
 # Find VTK
-find_package(VTK REQUIRED NO_MODULE)
+if(NOT VTK_RENDERING_BACKEND)
+  set(VTK_RENDERING_BACKEND OpenGL)
+endif()
+find_package(VTK REQUIRED NO_MODULE COMPONENTS
+  vtkCommonCore
+  vtkCommonDataModel
+  vtkFiltersSources
+  vtkIOCore
+  vtkIOLegacy
+  vtkIOXML
+  vtkRenderingCore
+  vtkRendering${VTK_RENDERING_BACKEND}
+)
 set( VTK_VERSION_REQUIRED 6 )
 if( VTK_VERSION_MAJOR LESS ${VTK_VERSION_REQUIRED} )
   message( FATAL_ERROR "${PROJECT_NAME} requires VTK ${VTK_VERSION_REQUIRED}. Version Found: ${VTK_VERSION_MAJOR}" )
