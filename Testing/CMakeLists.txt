@@ -1,13 +1,22 @@
 # Add standard remote object stores to user's
 # configuration.
 list(APPEND ExternalData_URL_TEMPLATES
-  "http://slicer.kitware.com/midas3/api/rest?method=midas.bitstream.download&checksum=%(hash)"
-  )
+  # Data published on GitHub Pages
+  "https://insightsoftwareconsortium.github.io/ITKTestingData/%(algo)/%(hash)"
+
+  # Data published on Girder
+  "https://data.kitware.com:443/api/v1/file/hashsum/%(algo)/%(hash)/download"
+
+  # Data published by developers using git-gerrit-push.
+  "https://itk.org/files/ExternalData/%(algo)/%(hash)"
+)
 
 # Test checking that the program cannot run without the flag -f
 add_test(NAME PolyDataCompressionFlag COMMAND $<TARGET_FILE:PolyDataCompression>
         -e ascii)
 set_tests_properties(PolyDataCompressionFlag PROPERTIES WILL_FAIL true )
+
+if(0) # TODO: these datasets are no longer available from the current download locations
 
 # Test checking that the file compressed is properly written
 ExternalData_Add_Test(PolyDataCompressionData NAME PolyDataCompressionCorrectOutput COMMAND $<TARGET_FILE:PolyDataCompression>
@@ -17,6 +26,7 @@ ExternalData_Add_Test(PolyDataCompressionData NAME PolyDataCompressionCorrectOut
 # Test of a normal run of the program with a VTK extension
 add_executable(PolyDataCompressionTest vtkTest.cxx)
 target_link_libraries(PolyDataCompressionTest PolyDataCompressionLib)
+
 ExternalData_Add_Test(PolyDataCompressionData NAME PolyDataCompressionVTKExtension COMMAND $<TARGET_FILE:PolyDataCompressionTest>
   --compare
   DATA{Data/BaselineCingulumNormalRun-compressed.vtk}
@@ -47,6 +57,7 @@ ExternalData_Add_Test(PolyDataCompressionData NAME PolyDataCompressionCurrentDir
     -e binary
     -f baseline.vtk#We do not specify the path of the file with DATA{} since we want to test that PolyDataCompression works when giving a file with no path
   )
+endif()
 
 # Test checking that * character is expanded (only checking on UNIX systems). We search for bash
 if( UNIX )
